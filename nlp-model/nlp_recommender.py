@@ -24,4 +24,4 @@ def get_recipe_recommendations(input):
     results = df.iloc[top_indices]
     results = results.sort_values(by='rating', ascending=False)
 
-    return results[['recipe_id','name', 'rating', ]]
+    return results[['recipe_id','name', 'rating']]
