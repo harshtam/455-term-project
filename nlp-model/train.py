@@ -1,6 +1,7 @@
 # Imports
 import pandas as pd
 import random
+import torch
 from sentence_transformers import SentenceTransformer, InputExample, losses
 from torch.utils.data import DataLoader
 
@@ -47,3 +48,7 @@ model.fit(
 
 # Save the model in a folder
 model.save("nlp-recipe-finder")
+
+recipe_embeddings = model.encode(df['tags'].tolist(), convert_to_tensor=True)
+
+torch.save(recipe_embeddings, "recipe_embeddings.pt")
