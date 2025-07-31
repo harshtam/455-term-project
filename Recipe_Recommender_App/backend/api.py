@@ -1,8 +1,6 @@
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from inference.object_classifier import classify_object
-from inference.state_classifier import classify_state
-from inference.nlp_recommender import get_recipe_recommendations
+from inference import classify_object, classify_state, get_recipe_recommendations
 from PIL import Image
 import io
 import uvicorn
