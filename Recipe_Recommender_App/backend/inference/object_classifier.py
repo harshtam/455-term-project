@@ -5,7 +5,7 @@ from backend.inference.utils import get_device
 
 device = get_device()
 
-model = models.resnet18(pretrained=False)
+model = models.resnet50(pretrained=False)
 model.fc = torch.nn.Linear(model.fc.in_features, 4)
 model.load_state_dict(torch.load("backend/model/all_items_classifier.pt", map_location=device))
 model.to(device)
