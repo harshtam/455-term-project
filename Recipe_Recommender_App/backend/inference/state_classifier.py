@@ -12,10 +12,10 @@ state_models = {
 }
 
 state_labels = {
-    "Eggplant": ["Whole", "Halved", "Sliced and Cooked"],
-    "Potato": ["Whole", "Peeled", "Fries"],
-    "Orange": ["Whole", "Peeled", "Segmented"],
-    "Cherry": ["With Stem", "Pitted", "In a Bowl"]
+    "Eggplant": ['Halved', 'Sliced and Cooked', 'Whole'],
+    "Potato": ['Fries', 'Peeled', 'Whole'],
+    "Orange": ['Peeled', 'Segmented', 'Whole'],
+    "Cherry": ['In a Bowl', 'Pitted', 'Stem Attached']
 }
 
 transform = transforms.Compose([
@@ -27,7 +27,7 @@ _loaded_models = {}
 
 def load_state_model(object_class):
     if object_class not in _loaded_models:
-        model = models.resnet18(pretrained=False)
+        model = models.resnet50(pretrained=False)
         model.fc = torch.nn.Linear(model.fc.in_features, 3)
         model.load_state_dict(torch.load(state_models[object_class], map_location=device))
         model.to(device)
