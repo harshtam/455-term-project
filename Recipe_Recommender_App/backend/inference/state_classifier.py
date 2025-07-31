@@ -28,8 +28,7 @@ _loaded_models = {}
 def load_state_model(object_class):
     if object_class not in _loaded_models:
         model = models.resnet18(pretrained=False)
-        num_states = len(state_labels[object_class])
-        model.fc = torch.nn.Linear(model.fc.in_features, num_states)
+        model.fc = torch.nn.Linear(model.fc.in_features, 3)
         model.load_state_dict(torch.load(state_models[object_class], map_location=device))
         model.to(device)
         model.eval()
