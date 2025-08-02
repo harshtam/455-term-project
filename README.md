@@ -1,4 +1,4 @@
-# 455-term-project
+# 455-term-project web app info
 
 To run the project app
 -> download the repo 
