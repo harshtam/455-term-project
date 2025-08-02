@@ -7,7 +7,14 @@ device = get_device()
 
 model = models.resnet50(pretrained=False)
 model.fc = torch.nn.Linear(model.fc.in_features, 4)
-model.load_state_dict(torch.load("backend/model/all_items_classifier.pt", map_location=device))
+
+checkpoint = torch.load("backend/model/all_items_classifier.pt", map_location=device)
+
+model_state_dict = checkpoint["model_state_dict"]
+
+class_labels = checkpoint.get("class_names", ['Eggplant', 'Potato', 'Orange', 'Cherry'])
+
+model.load_state_dict(model_state_dict)
 model.to(device)
 model.eval()
 
@@ -15,8 +22,6 @@ transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor(),
 ])
-
-class_labels = ['Eggplant', 'Potato', 'Orange', 'Cherry']
 
 def classify_object(image: Image.Image):
     tensor = transform(image).unsqueeze(0).to(device)
