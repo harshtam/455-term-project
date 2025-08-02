@@ -1,4 +1,4 @@
-# 455-term-project web app info
+# 455-term-project web app info - Dawson Damuth and Harsh Tamada
 
 To run the project app
 -> download the repo 
