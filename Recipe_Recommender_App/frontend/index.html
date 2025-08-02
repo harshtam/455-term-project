@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>455 Term Project</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+  </head>
+  <body>
+    <br/>
+    <div class="container">
+        <h1>CSE 455 Term Project</h1> <br/>
+        <h4>By Dawson Damuth and Harsh Tamada</h4>
+    </div>
+    <br/>
+    <div class="container">
+
+      <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">Table of Contents</h5>
+        </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><a class="card-link" href="#intro">Research Paper</a></li>
+            <li class="list-group-item"><a class="card-link" href="#cmb-mod">Combined Model</a></li>
+          </ul>
+      </div>
+    <br/> 
+    <div class="container">
+      <h2 class="mb-4" id="intro">1 Introduction</h2>
+      <p>
+        The objective of the application was split into four phases; data collection, CV model building, NLP model building, and application development. The first of these, data collection, was a self-directed process of collecting a total of 12,000 images for our future models. Split evenly between the four chosen fruits and vegetables, the images were then divided evenly again for each of the three states of the items, resulting in end-category batches of 1,000 each. After the data has been collected, we can begin model construction.
+      </p>
+      <p>
+        Beginning our second phase we will be utilizing five different pretrained ResNet models, all taking the form of the ResNet50 architecture. All models are trained independently using transfer learning, once globally for the basic classifier, then in each item subfolder to classify the state of the object. The models work hierarchically, with the global classifier feeding into the latter model in the application to identify which of the state models to use. This dependency means our models must be accurate and efficient, since they are building off one another to make decisions. 
+      </p>
+
+      <p>
+        The third phase involves the construction and training of our NLP model. For this task we will be using a pretrained BERT model to give us a recommendation list of the most compatible recipe list from a given database of recipes. For this we use transfer learning to fine tune our model to give us this list based on criterion such as highest rating, etc. This is achieved by filtering data into a trainable form and training it on those to fit our criteria.  
+      </p>
+
+      <p>
+        Finalizing our development phase, it was time to build the framework for our application, both front and back-end. For the back end of the application, we needed to create model scripts which allowed for images to be passed through and a two-layer classification to be made, the keywords of the classification later being fed through the NLP. All the inference files also needed to be backed by the model weights, which are provided. Additionally, we needed an API (Application Programming Interface) to execute the model applications. We then add a front-end to our application that includes this paper and an interactive way to use our model which includes uploading a picture of our vegetable/fruit and adding any descriptors we can to further narrow down our search for a recipe which is outputted in a table along with the recipe name, id  and a rating score from the interactions list. 
+      </p>
+      <p>
+        Each model was trained using transfer learning on the existing ResNet50 architecture, with all hyperparameters constant between the models, aside from a change in learning rate to 1e-4 and batch size lowering to 16 to account for the sparsity of data in the four state-classification models, where the general model has a learning rate of 5e-4 and batch size of 64. Aside, these models share all hyperparameters and criterion for loss and optimization. The data is split into train, test, and validation sets by proportions of 70, 15, and 15 percent of their respective data sets. Additionally, both models are trained using transfer learning on the existing weights over 10 epochs. In preprocessing for both the training and final application model, the images are resized to fit 224x224 pixels, allowing uniformity in the input structure while preserving enough of the image data. 
+      </p>
+      <h2 class="mb-4" id="scip">2 Methodology</h2>
+      <p>As mentioned, the two model types used are ResNet50 and BERT. There is a total of six models trained for the application; a general fruit/vegetable classifier, four individual state classifiers for each previously classified item, and a BERT model which outputs a list of recipes and rankings given the keyword entries. </p>
+      <h3 class="mb-4">2.1 ResNet Models </h3>
+      <p>Each of the ResNet models were imported from TorchVision: PyTorch's Computer Vision library [1]. The library provides SOTA pre-trained models for ease of use in a task like ours where transfer learning is of great value, considering the limited time and computational resources. </p>
+      <p>Each model was trained using transfer learning on the existing ResNet50 architecture, with all hyperparameters constant between the models, aside from a change in learning rate to 1e-4 and batch size lowering to 16 to account for the sparsity of data in the four state-classification models, where the general model has a learning rate of 5e-4 and batch size of 64. Aside, these models share all hyperparameters and criterion for loss and optimization. The data is split into train, test, and validation sets by proportions of 70, 15, and 15 percent of their respective data sets. Additionally, both models are trained using transfer learning on the existing weights over 10 epochs. In preprocessing for both the training and final application model, the images are resized to fit 224x224 pixels, allowing uniformity in the input structure while preserving enough of the image data. </p>
+      <h3 class="mb-4">2.2 BERT Model</h3>
+      <p>The BERT models used for the NLP model here is an SBERT (or Sentence Transformer) particularly the “all-MiniLM-L6-v2". This falls into the BERT class of models which was chosen for its strong semantics embedding. This fits the prompt of finding the most relevant recipes based on an input that consists of ingredients and/or descriptors. It is also a compact and fast model </p>
+      <p>The model was trained using transfer learning, using training pairs that embed positive and negative queries. A query in our case is ingredients and/or descriptors in the given list of recipes (RAW_recipes.csv, RAW_interaction.csv). These were further filtered down into a training dataset that consisted of recipe info (id, name, ingredients and descriptors) and a mean rating related to each recipe. To train, we first make training pairs for each query that include positive (itself) and negative query (randomly selected query that has a rating lesser than 3.0). We then train it for 3 epochs with batch sizes of 16 and a cosine similarity loss function (this is used for the purpose of semantic similarity to recommend recipes).</p>
+      
+      <h2 class="mb-4">Training and Results</h2>
+      <p>For detailed results refer to the doc!</p>
+      <h2 class="mb-4">Conclusion</h2>
+      <p>In our paper, we investigated the effectiveness of transfer learning in the integration of SOTA deep learning models in a common-day application. This experiment showed that not only can these types of models be applied in a variety of use-cases, but they’re also incredibly flexible in their usage. From the point of model evaluation, integrating these models in the intended application was an exciting task which took intricate planning, but ultimately taught us a way to put our domain knowledge into use. Although the application is at a small scale currently, it would be quite easy to begin expanding the model to include a plethora of modern-day ingredients to make a much more fleshed out end-user application. </p>
+      <h2 class="mb-4">References</h2>
+      <ul>
+        <li>maintainers, TorchVision, and contributors. “TorchVision: PyTorch’s Computer Vision Library.” <i>GitHub</i>, 1 Nov. 2016, github.com/pytorch/vision. </li>
+        <li>He, Kaiming, et al. <i>Deep Residual Learning for Image Recognition.</i> 10 Dec. 2015.</li>
+        <li>Devlin, Jacob, et al. <i>BERT: Pre-Training of Deep Bidirectional Transformers for Language Understanding.</i> 24 May 2019. </li>
+        <li>Reimers, N., & Gurevych, I. (11 2019). Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks. <i>Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing.</i> Retrieved from https://arxiv.org/abs/1908.10084</li>
+      </ul>
+      <h2 class="mb-4" id="cmb-mod">Combined Model</h2>
+      <br/>
+      <h6> You can test our model through here! Upload an image of a/an {Orange, Cherry, Potato, Eggplant} and see if you find a relevant recipe!</h6>
+      <br/>
+    <form id="uploadForm">
+        <div class="mb-3">
+            <input class="form-control" type="file" id="imageInput" accept="image/*" required>
+            <br/>
+            <b>*Optional*</b> Add descriptors and/or other ingredients (without punctuation)!  [e.g. mushroom easy-to-make 60-minutes-preparation, etc.]
+            <input class="form-control" type="text" id="descriptionInput">
+            <br/>
+        </div>
+        <button type="submit" class="btn btn-primary">Get Recommendations</button>
+    </form>
+
+    <hr>
+
+    <h3>Top Recipes</h3>
+    <table class="table table-striped mt-3" id="resultsTable">
+        <thead>
+            <tr>
+                <th>Recipe ID</th>
+                <th>Recipe Name</th>
+                <th>Rating</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be added by JS -->
+        </tbody>
+    </table>
+
+    <script src="/static/js/app.js"></script>
+    </div>
+    </body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+  </body>
+</html>
+
